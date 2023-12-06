@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import NavBar from './components/NavBar';
 import BookShelf from './components/BookShelf';
+import Modal from './components/Modal';
 import fetchBooks from './helpers/fetchBooks';
 import { selectBooks, setBooks } from './store/booksSlice';
+import { selectIsModalOpened } from './store/uiSlice';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
 
 const App = () => {
-  const books = useAppSelector(selectBooks);
-  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const books = useAppSelector(selectBooks);
+  const isModalOpened = useAppSelector(selectIsModalOpened);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setIsLoading(true);
@@ -32,6 +35,8 @@ const App = () => {
           <BookShelf books={books} />
         )}
       </div>
+
+      {isModalOpened && <Modal>Content</Modal>}
     </div>
   );
 };
