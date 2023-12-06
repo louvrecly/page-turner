@@ -20,7 +20,7 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <>
+    <div className="u-min-h-screen u-bg-gradient-to-b u-from-slate-950 u-to-slate-900">
       <NavBar />
 
       <div className="u-mx-auto u-py-2 u-px-4 u-container">
@@ -32,7 +32,7 @@ const App = () => {
           <BookShelf books={books} />
         )}
       </div>
-    </>
+    </div>
   );
 };
 
