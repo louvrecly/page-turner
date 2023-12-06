@@ -1,3 +1,4 @@
+import BookItemContainer from './Container';
 import BookInfo from './BookInfo';
 import GenreList from '../../GenreList';
 import Book from '../../../types/book';
@@ -8,7 +9,7 @@ interface BookItemProps {
 
 const BookItem = ({ book }: BookItemProps) => {
   return (
-    <div className="u-py-4 u-px-6 u-flex-grow u-aspect-[2/3] u-bg-gradient-to-b u-from-emerald-900 u-to-emerald-600 u-rounded u-shadow u-flex u-flex-col u-items-stretch u-gap-2 sm:u-flex-grow-0 sm:u-basis-1/3 md:u-basis-1/4 lg:u-basis-1/5">
+    <BookItemContainer>
       <BookInfo
         title={book.title}
         author={book.author}
@@ -17,7 +18,7 @@ const BookItem = ({ book }: BookItemProps) => {
       />
 
       <GenreList genres={book.genres} />
-    </div>
+    </BookItemContainer>
   );
 };
 
