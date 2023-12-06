@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import NavBar from './components/NavBar';
 import BookShelf from './components/BookShelf';
 import Modal from './components/Modal';
+import BookForm from './components/BookForm';
 import fetchBooks from './helpers/fetchBooks';
 import { selectBooks, setBooks } from './store/booksSlice';
 import { selectIsModalOpened } from './store/uiSlice';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const books = useAppSelector(selectBooks);
   const isModalOpened = useAppSelector(selectIsModalOpened);
@@ -36,7 +37,11 @@ const App = () => {
         )}
       </div>
 
-      {isModalOpened && <Modal>Content</Modal>}
+      {isModalOpened && (
+        <Modal>
+          <BookForm />
+        </Modal>
+      )}
     </div>
   );
 };
