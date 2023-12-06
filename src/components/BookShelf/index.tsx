@@ -1,5 +1,5 @@
-import Book from '../../types/book';
 import BookItem from './BookItem';
+import Book from '../../types/book';
 
 interface BookShelfProps {
   books: Book[];

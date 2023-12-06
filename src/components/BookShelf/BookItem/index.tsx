@@ -1,6 +1,6 @@
-import Book from '../../../types/book';
-import GenreList from '../../GenreList';
 import BookInfo from './BookInfo';
+import GenreList from '../../GenreList';
+import Book from '../../../types/book';
 
 interface BookItemProps {
   book: Book;

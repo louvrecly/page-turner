@@ -1,5 +1,5 @@
-import Genre from '../../types/genre';
 import GenrePill from './GenrePill';
+import Genre from '../../types/genre';
 
 interface GenreListProps {
   genres: Genre[];
