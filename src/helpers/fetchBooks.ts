@@ -149,8 +149,10 @@ const books: Book[] = [
   },
 ];
 
-function fetchBooks(): Book[] {
-  return books;
+function fetchBooks(): Promise<Book[]> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(books), 1000);
+  });
 }
 
 export default fetchBooks;
