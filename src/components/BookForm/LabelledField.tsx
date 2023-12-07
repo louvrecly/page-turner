@@ -17,11 +17,11 @@ const LabelledField = ({
 }: LabelledFieldProps) => {
   return (
     <div className={twMerge('u-flex u-justify-between u-gap-2', className)}>
-      <label className="u-py-1" htmlFor={htmlFor}>
+      <label className="u-py-1 u-flex-1" htmlFor={htmlFor}>
         {label}
       </label>
 
-      <div className="u-basis-56 u-flex u-flex-col u-items-stretch u-gap-px">
+      <div className="u-basis-2/3 u-flex u-flex-col u-items-stretch u-gap-px">
         {children}
         <p className="u-w-full u-text-xs u-text-rose-600">{errorMessage}</p>
       </div>

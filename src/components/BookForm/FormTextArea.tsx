@@ -20,7 +20,10 @@ const FormTextArea = forwardRef(
     return (
       <textarea
         ref={ref}
-        className={twMerge('u-py-1 u-px-2 u-min-h-[32px] u-rounded', className)}
+        className={twMerge(
+          'u-py-1 u-px-2 u-min-h-[32px] u-bg-zinc-800/70 u-rounded',
+          className,
+        )}
         {...props}
       />
     );

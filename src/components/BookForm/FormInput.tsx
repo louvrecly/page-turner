@@ -20,7 +20,10 @@ const FormInput = forwardRef(
     return (
       <input
         ref={ref}
-        className={twMerge('u-py-1 u-px-2 u-w-full u-rounded', className)}
+        className={twMerge(
+          'u-py-1 u-px-2 u-w-full u-bg-zinc-800/70 u-rounded',
+          className,
+        )}
         {...props}
       />
     );

@@ -15,7 +15,7 @@ const Modal = ({ children }: ModalProps) => {
       onClick={() => dispatch(toggleModal(false))}
     >
       <div
-        className="u-relative u-p-4 u-bg-zinc-950/70 u-min-w-[200px] u-min-h-[240px] u-rounded u-z-10"
+        className="u-relative u-p-4 u-bg-zinc-950/70 u-w-1/2 u-min-w-[280px] u-rounded u-z-10"
         onClick={(e) => e.stopPropagation()}
       >
         <button
