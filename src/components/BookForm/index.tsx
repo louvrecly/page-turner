@@ -1,13 +1,18 @@
-import { useForm } from 'react-hook-form';
+import { useMemo } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Select from 'react-select';
 import FormInput from './FormInput';
 import FormTextArea from './FormTextArea';
 import LabelledField from './LabelledField';
-import bookFormValuesSchema from './schema';
+import bookFormValuesSchema, {
+  BookFormValues,
+  getBookFormValues,
+  parseBookFormValues,
+} from './schema';
 import Book from '../../types/book';
 import BookFormType from '../../types/bookForm';
-import { useMemo } from 'react';
-
+import { genreOptions } from '../../types/genre';
 export interface BookFormProps {
   type: BookFormType;
   book: Book;
@@ -15,12 +20,18 @@ export interface BookFormProps {
 }
 
 const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
+  const defaultValues = useMemo<BookFormValues>(
+    () => getBookFormValues(book),
+    [book],
+  );
+
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
-  } = useForm<Book>({
-    defaultValues: book,
+  } = useForm<BookFormValues>({
+    defaultValues,
     resolver: yupResolver(bookFormValuesSchema),
   });
 
@@ -36,7 +47,10 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
   return (
     <form
       className="u-flex u-flex-col u-items-stretch u-gap-2"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit((bookFormValues: BookFormValues) => {
+        const parsedBook = parseBookFormValues(bookFormValues);
+        onSubmit(parsedBook);
+      })}
     >
       <h2>{formTitle}</h2>
 
@@ -90,6 +104,27 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
           id="description"
           {...register('description')}
           disabled={type === 'remove'}
+        />
+      </LabelledField>
+
+      <LabelledField
+        className="u-flex-col u-items-stretch"
+        label="Genres"
+        htmlFor="genres"
+        errorMessage={errors.genres?.message}
+      >
+        <Controller
+          name="genres"
+          control={control}
+          render={({ field }) => (
+            <Select
+              inputId="genres"
+              options={genreOptions}
+              {...field}
+              isMulti
+              isDisabled={type === 'remove'}
+            />
+          )}
         />
       </LabelledField>
 

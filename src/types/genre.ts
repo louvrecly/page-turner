@@ -1,3 +1,5 @@
+import { SelectOption } from './bookForm';
+
 export const ALL_GENRES = [
   'Art',
   'Biography',
@@ -29,6 +31,20 @@ export const ALL_GENRES = [
   'Travel',
   'Young Adult',
 ] as const;
+
+export function getGenreOption(genre: Genre): SelectOption<Genre> {
+  return {
+    value: genre,
+    label: genre,
+  };
+}
+
+export function parseGenreOption(genreOption: SelectOption<Genre>): Genre {
+  return genreOption.value;
+}
+
+export const genreOptions: SelectOption<Genre>[] =
+  ALL_GENRES.map(getGenreOption);
 
 type Genre = (typeof ALL_GENRES)[number];
 
