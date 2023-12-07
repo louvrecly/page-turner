@@ -2,12 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import NavBar from './components/NavBar';
 import BookShelf from './components/BookShelf';
 import Modal from './components/Modal';
-import SaveBookForm from './components/SaveBookForm';
+import BookForm from './components/BookForm';
 import fetchBooks, { getEmptyBook } from './helpers/fetchBooks';
 import {
   addBook,
   editBook,
+  removeBook,
   selectActiveBookId,
+  selectBookFormType,
   selectBooks,
   selectMaxBookId,
   setBooks,
@@ -22,6 +24,7 @@ const App = () => {
   const books = useAppSelector(selectBooks);
   const maxBookId = useAppSelector(selectMaxBookId);
   const activeBookId = useAppSelector(selectActiveBookId);
+  const bookFormType = useAppSelector(selectBookFormType);
   const isModalOpened = useAppSelector(selectIsModalOpened);
   const dispatch = useAppDispatch();
 
@@ -33,12 +36,16 @@ const App = () => {
 
   const handleSubmitBook = useCallback(
     (book: Book) => {
-      if (book.id > maxBookId) dispatch(addBook(book));
-      else dispatch(editBook(book));
+      if (bookFormType === 'remove') {
+        dispatch(removeBook(book.id));
+      } else {
+        if (book.id > maxBookId) dispatch(addBook(book));
+        else dispatch(editBook(book));
+      }
 
       dispatch(toggleModal(false));
     },
-    [dispatch, maxBookId],
+    [bookFormType, dispatch, maxBookId],
   );
 
   useEffect(() => {
@@ -65,10 +72,13 @@ const App = () => {
 
       {isModalOpened && (
         <Modal>
-          <SaveBookForm
-            book={initialBookFormValues}
-            onSubmit={handleSubmitBook}
-          />
+          {bookFormType && (
+            <BookForm
+              type={bookFormType}
+              book={initialBookFormValues}
+              onSubmit={handleSubmitBook}
+            />
+          )}
         </Modal>
       )}
     </div>

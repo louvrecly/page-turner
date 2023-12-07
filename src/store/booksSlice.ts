@@ -1,17 +1,20 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import Book from '../types/book';
+import BookFormType from '../types/bookForm';
 
 interface BooksState {
+  books: Book[];
   maxBookId: number;
   activeBookId: number;
-  books: Book[];
+  bookFormType: BookFormType;
 }
 
 const initialState: BooksState = {
+  books: [],
   maxBookId: 0,
   activeBookId: 0,
-  books: [],
+  bookFormType: 'save',
 };
 
 export const booksSlice = createSlice({
@@ -24,11 +27,6 @@ export const booksSlice = createSlice({
         (maxId, book) => Math.max(maxId, book.id),
         state.maxBookId,
       );
-    },
-    setActiveBookId(state, action: PayloadAction<number>) {
-      const bookId = action.payload;
-
-      state.activeBookId = bookId;
     },
     addBook(state, action: PayloadAction<Book>) {
       const bookToSave = action.payload;
@@ -48,15 +46,25 @@ export const booksSlice = createSlice({
       const index = state.books.findIndex((book) => book.id === bookIdToRemove);
       state.books.splice(index, 1);
     },
+    setBookForm(
+      state,
+      action: PayloadAction<{ type: BookFormType; bookId: number }>,
+    ) {
+      const { type, bookId } = action.payload;
+      state.bookFormType = type;
+      state.activeBookId = bookId;
+    },
   },
 });
 
-export const { setBooks, setActiveBookId, addBook, editBook, removeBook } =
+export const { setBooks, addBook, editBook, removeBook, setBookForm } =
   booksSlice.actions;
 export const selectBooks = (state: RootState) => state.books.books;
 export const selectMaxBookId = (state: RootState) => state.books.maxBookId;
 export const selectActiveBookId = (state: RootState) =>
   state.books.activeBookId;
+export const selectBookFormType = (state: RootState) =>
+  state.books.bookFormType;
 
 const booksReducer = booksSlice.reducer;
 

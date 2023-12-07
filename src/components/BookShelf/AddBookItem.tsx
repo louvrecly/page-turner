@@ -1,16 +1,17 @@
 import { useCallback } from 'react';
 import BookItemContainer from './BookItem/Container';
-import { useAppDispatch } from '../../hooks/redux';
-import { setActiveBookId } from '../../store/booksSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { toggleModal } from '../../store/uiSlice';
+import { setBookForm, selectMaxBookId } from '../../store/booksSlice';
 
 const AddBookItem = () => {
+  const maxBookId = useAppSelector(selectMaxBookId);
   const dispatch = useAppDispatch();
 
   const handleClick = useCallback(() => {
-    dispatch(setActiveBookId(0));
     dispatch(toggleModal(true));
-  }, [dispatch]);
+    dispatch(setBookForm({ type: 'save', bookId: maxBookId + 1 }));
+  }, [dispatch, maxBookId]);
 
   return (
     <BookItemContainer className="u-from-sky-600/50 u-to-sky-400/50 u-transition-colors hover:u-from-sky-600/70 hover:u-to-sky-400/70">

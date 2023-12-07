@@ -3,8 +3,8 @@ import BookItemContainer from './Container';
 import BookInfo from './BookInfo';
 import GenreList from '../../GenreList';
 import { useAppDispatch } from '../../../hooks/redux';
-import { removeBook, setActiveBookId } from '../../../store/booksSlice';
 import { toggleModal } from '../../../store/uiSlice';
+import { setBookForm } from '../../../store/booksSlice';
 import Book from '../../../types/book';
 
 interface BookItemProps {
@@ -15,14 +15,15 @@ const BookItem = ({ book }: BookItemProps) => {
   const dispatch = useAppDispatch();
 
   const handleBookOnClick = useCallback(() => {
-    dispatch(setActiveBookId(book.id));
     dispatch(toggleModal(true));
+    dispatch(setBookForm({ type: 'save', bookId: book.id }));
   }, [book.id, dispatch]);
 
   const handleCloseButtonOnClick = useCallback(
     (e: MouseEvent) => {
       e.stopPropagation();
-      dispatch(removeBook(book.id));
+      dispatch(toggleModal(true));
+      dispatch(setBookForm({ type: 'remove', bookId: book.id }));
     },
     [book.id, dispatch],
   );

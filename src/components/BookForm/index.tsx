@@ -1,50 +1,44 @@
-import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormInput from './FormInput';
 import FormTextArea from './FormTextArea';
 import LabelledField from './LabelledField';
+import bookFormValuesSchema from './schema';
 import Book from '../../types/book';
-import { ALL_GENRES } from '../../types/genre';
+import BookFormType from '../../types/bookForm';
+import { useMemo } from 'react';
 
-const BookFormValuesSchema: yup.ObjectSchema<Book> = yup
-  .object({
-    id: yup.number().positive().integer().required(),
-    title: yup.string().required(),
-    author: yup.string().required(),
-    price: yup.number().positive().required(),
-    description: yup.string().defined(),
-    genres: yup
-      .array(yup.string().defined().oneOf(ALL_GENRES))
-      .ensure()
-      .required(),
-  })
-  .required();
-
-interface SaveBookFormProps {
+export interface BookFormProps {
+  type: BookFormType;
   book: Book;
   onSubmit: (book: Book) => void;
 }
 
-const SaveBookForm = ({ book, onSubmit }: SaveBookFormProps) => {
-  const defaultValues = useMemo(() => structuredClone(book), [book]);
-
+const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Book>({
-    defaultValues,
-    resolver: yupResolver(BookFormValuesSchema),
+    defaultValues: book,
+    resolver: yupResolver(bookFormValuesSchema),
   });
+
+  const formTitle = useMemo(
+    () => (type === 'save' ? 'Save the Book' : 'Confirm to remove this book?'),
+    [type],
+  );
+  const formAction = useMemo(
+    () => (type === 'save' ? 'Save' : 'Confirm'),
+    [type],
+  );
 
   return (
     <form
       className="u-flex u-flex-col u-items-stretch u-gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h2>Book Form</h2>
+      <h2>{formTitle}</h2>
 
       <FormInput {...register('id')} value={book.id} disabled hidden />
 
@@ -53,7 +47,11 @@ const SaveBookForm = ({ book, onSubmit }: SaveBookFormProps) => {
         htmlFor="title"
         errorMessage={errors.title?.message}
       >
-        <FormInput id="title" {...register('title')} />
+        <FormInput
+          id="title"
+          {...register('title')}
+          disabled={type === 'remove'}
+        />
       </LabelledField>
 
       <LabelledField
@@ -61,7 +59,11 @@ const SaveBookForm = ({ book, onSubmit }: SaveBookFormProps) => {
         htmlFor="author"
         errorMessage={errors.author?.message}
       >
-        <FormInput id="author" {...register('author')} />
+        <FormInput
+          id="author"
+          {...register('author')}
+          disabled={type === 'remove'}
+        />
       </LabelledField>
 
       <LabelledField
@@ -69,7 +71,13 @@ const SaveBookForm = ({ book, onSubmit }: SaveBookFormProps) => {
         htmlFor="price"
         errorMessage={errors.price?.message}
       >
-        <FormInput id="price" type="number" step=".01" {...register('price')} />
+        <FormInput
+          id="price"
+          type="number"
+          step=".01"
+          {...register('price')}
+          disabled={type === 'remove'}
+        />
       </LabelledField>
 
       <LabelledField
@@ -78,12 +86,16 @@ const SaveBookForm = ({ book, onSubmit }: SaveBookFormProps) => {
         htmlFor="description"
         errorMessage={errors.description?.message}
       >
-        <FormTextArea id="description" {...register('description')} />
+        <FormTextArea
+          id="description"
+          {...register('description')}
+          disabled={type === 'remove'}
+        />
       </LabelledField>
 
-      <button type="submit">Save</button>
+      <button type="submit">{formAction}</button>
     </form>
   );
 };
 
-export default SaveBookForm;
+export default BookForm;
