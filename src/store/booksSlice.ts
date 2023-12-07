@@ -23,10 +23,22 @@ export const booksSlice = createSlice({
         state.maxBookId,
       );
     },
+    addBook(state, action: PayloadAction<Book>) {
+      const bookToSave = action.payload;
+
+      state.books.push(bookToSave);
+      state.maxBookId = bookToSave.id;
+    },
+    editBook(state, action: PayloadAction<Book>) {
+      const bookToSave = action.payload;
+
+      const index = state.books.findIndex((book) => book.id === bookToSave.id);
+      state.books.splice(index, 1, bookToSave);
+    },
   },
 });
 
-export const { setBooks } = booksSlice.actions;
+export const { setBooks, addBook, editBook } = booksSlice.actions;
 export const selectBooks = (state: RootState) => state.books.books;
 export const selectMaxBookId = (state: RootState) => state.books.maxBookId;
 

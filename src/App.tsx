@@ -1,12 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import NavBar from './components/NavBar';
 import BookShelf from './components/BookShelf';
 import Modal from './components/Modal';
 import BookForm from './components/BookForm';
 import fetchBooks from './helpers/fetchBooks';
-import { selectBooks, selectMaxBookId, setBooks } from './store/booksSlice';
-import { selectIsModalOpened } from './store/uiSlice';
+import {
+  addBook,
+  selectBooks,
+  selectMaxBookId,
+  setBooks,
+} from './store/booksSlice';
+import { selectIsModalOpened, toggleModal } from './store/uiSlice';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
+import Book from './types/book';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,6 +21,14 @@ const App = () => {
   const maxBookId = useAppSelector(selectMaxBookId);
   const isModalOpened = useAppSelector(selectIsModalOpened);
   const dispatch = useAppDispatch();
+
+  const handleSubmitBook = useCallback(
+    (book: Book) => {
+      dispatch(addBook(book));
+      dispatch(toggleModal(false));
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -25,7 +39,7 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div className="u-relative u-w-screen u-min-h-screen u-bg-gradient-to-b u-from-slate-950 u-to-slate-900">
+    <div className="u-relative u-w-screen u-min-h-screen u-bg-gradient-to-b u-from-slate-950 u-to-slate-900 u-text-white">
       <NavBar />
 
       <div className="u-mx-auto u-p-4 u-container">
@@ -40,7 +54,7 @@ const App = () => {
 
       {isModalOpened && (
         <Modal>
-          <BookForm bookId={maxBookId} />
+          <BookForm bookId={maxBookId + 1} onSubmit={handleSubmitBook} />
         </Modal>
       )}
     </div>

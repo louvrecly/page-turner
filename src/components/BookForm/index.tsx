@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,9 +8,7 @@ import LabelledField from './LabelledField';
 import Book from '../../types/book';
 import { ALL_GENRES } from '../../types/genre';
 
-type BookFormValues = Book;
-
-const BookFormValuesSchema: yup.ObjectSchema<BookFormValues> = yup
+const BookFormValuesSchema: yup.ObjectSchema<Book> = yup
   .object({
     id: yup.number().positive().integer().required(),
     title: yup.string().required(),
@@ -26,9 +24,10 @@ const BookFormValuesSchema: yup.ObjectSchema<BookFormValues> = yup
 
 interface BookFormProps {
   bookId: number;
+  onSubmit: (book: Book) => void;
 }
 
-const BookForm = ({ bookId }: BookFormProps) => {
+const BookForm = ({ bookId, onSubmit }: BookFormProps) => {
   const defaultValues = useMemo(
     () => ({
       id: bookId,
@@ -41,16 +40,11 @@ const BookForm = ({ bookId }: BookFormProps) => {
     [bookId],
   );
 
-  const onSubmit = useCallback(
-    (formValues: BookFormValues) => console.log({ formValues }),
-    [],
-  );
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<BookFormValues>({
+  } = useForm<Book>({
     defaultValues,
     resolver: yupResolver(BookFormValuesSchema),
   });
