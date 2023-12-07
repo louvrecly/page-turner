@@ -23,22 +23,12 @@ const BookFormValuesSchema: yup.ObjectSchema<Book> = yup
   .required();
 
 interface BookFormProps {
-  bookId: number;
+  book: Book;
   onSubmit: (book: Book) => void;
 }
 
-const BookForm = ({ bookId, onSubmit }: BookFormProps) => {
-  const defaultValues = useMemo(
-    () => ({
-      id: bookId,
-      title: '',
-      author: '',
-      price: 0,
-      description: '',
-      genres: [],
-    }),
-    [bookId],
-  );
+const BookForm = ({ book, onSubmit }: BookFormProps) => {
+  const defaultValues = useMemo(() => structuredClone(book), [book]);
 
   const {
     register,
@@ -56,7 +46,7 @@ const BookForm = ({ bookId, onSubmit }: BookFormProps) => {
     >
       <h2>Book Form</h2>
 
-      <FormInput {...register('id')} value={bookId} disabled hidden />
+      <FormInput {...register('id')} value={book.id} disabled hidden />
 
       <LabelledField
         label="Title"

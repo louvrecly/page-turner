@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import NavBar from './components/NavBar';
 import BookShelf from './components/BookShelf';
 import Modal from './components/Modal';
@@ -21,6 +21,18 @@ const App = () => {
   const maxBookId = useAppSelector(selectMaxBookId);
   const isModalOpened = useAppSelector(selectIsModalOpened);
   const dispatch = useAppDispatch();
+
+  const defaultBookFormValues = useMemo(
+    () => ({
+      id: maxBookId + 1,
+      title: '',
+      author: '',
+      price: 0,
+      description: '',
+      genres: [],
+    }),
+    [maxBookId],
+  );
 
   const handleSubmitBook = useCallback(
     (book: Book) => {
@@ -54,7 +66,7 @@ const App = () => {
 
       {isModalOpened && (
         <Modal>
-          <BookForm bookId={maxBookId + 1} onSubmit={handleSubmitBook} />
+          <BookForm book={defaultBookFormValues} onSubmit={handleSubmitBook} />
         </Modal>
       )}
     </div>
