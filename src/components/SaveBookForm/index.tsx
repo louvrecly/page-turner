@@ -22,12 +22,12 @@ const BookFormValuesSchema: yup.ObjectSchema<Book> = yup
   })
   .required();
 
-interface BookFormProps {
+interface SaveBookFormProps {
   book: Book;
   onSubmit: (book: Book) => void;
 }
 
-const BookForm = ({ book, onSubmit }: BookFormProps) => {
+const SaveBookForm = ({ book, onSubmit }: SaveBookFormProps) => {
   const defaultValues = useMemo(() => structuredClone(book), [book]);
 
   const {
@@ -86,4 +86,4 @@ const BookForm = ({ book, onSubmit }: BookFormProps) => {
   );
 };
 
-export default BookForm;
+export default SaveBookForm;

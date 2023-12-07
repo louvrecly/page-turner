@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import NavBar from './components/NavBar';
 import BookShelf from './components/BookShelf';
 import Modal from './components/Modal';
-import BookForm from './components/BookForm';
+import SaveBookForm from './components/SaveBookForm';
 import fetchBooks, { getEmptyBook } from './helpers/fetchBooks';
 import {
   addBook,
@@ -65,7 +65,10 @@ const App = () => {
 
       {isModalOpened && (
         <Modal>
-          <BookForm book={initialBookFormValues} onSubmit={handleSubmitBook} />
+          <SaveBookForm
+            book={initialBookFormValues}
+            onSubmit={handleSubmitBook}
+          />
         </Modal>
       )}
     </div>
