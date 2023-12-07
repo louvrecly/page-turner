@@ -1,8 +1,10 @@
+import { MouseEvent, useCallback } from 'react';
 import BookItemContainer from './Container';
 import BookInfo from './BookInfo';
 import GenreList from '../../GenreList';
 import { useAppDispatch } from '../../../hooks/redux';
-import { removeBook } from '../../../store/booksSlice';
+import { removeBook, setActiveBookId } from '../../../store/booksSlice';
+import { toggleModal } from '../../../store/uiSlice';
 import Book from '../../../types/book';
 
 interface BookItemProps {
@@ -12,11 +14,24 @@ interface BookItemProps {
 const BookItem = ({ book }: BookItemProps) => {
   const dispatch = useAppDispatch();
 
+  const handleBookOnClick = useCallback(() => {
+    dispatch(setActiveBookId(book.id));
+    dispatch(toggleModal(true));
+  }, [book.id, dispatch]);
+
+  const handleCloseButtonOnClick = useCallback(
+    (e: MouseEvent) => {
+      e.stopPropagation();
+      dispatch(removeBook(book.id));
+    },
+    [book.id, dispatch],
+  );
+
   return (
-    <BookItemContainer>
+    <BookItemContainer onClick={handleBookOnClick}>
       <button
         className="u-absolute u-top-px u-right-2"
-        onClick={() => dispatch(removeBook(book.id))}
+        onClick={handleCloseButtonOnClick}
       >
         ✕
       </button>

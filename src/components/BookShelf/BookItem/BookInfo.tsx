@@ -10,7 +10,7 @@ const BookInfo = ({ title, author, price, description }: BookInfoProps) => {
     <>
       <h2 className=" u-font-bold">{title}</h2>
 
-      <div className="u-text-sm u-flex u-justify-between u-gap-2">
+      <div className="u-text-sm u-flex u-justify-between u-gap-2 u-flex-wrap">
         <p>
           <span>By </span>
           <span className="u-font-bold">{author}</span>

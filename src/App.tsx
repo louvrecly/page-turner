@@ -6,6 +6,7 @@ import BookForm from './components/BookForm';
 import fetchBooks, { getEmptyBook } from './helpers/fetchBooks';
 import {
   addBook,
+  editBook,
   selectActiveBookId,
   selectBooks,
   selectMaxBookId,
@@ -32,10 +33,12 @@ const App = () => {
 
   const handleSubmitBook = useCallback(
     (book: Book) => {
-      dispatch(addBook(book));
+      if (book.id > maxBookId) dispatch(addBook(book));
+      else dispatch(editBook(book));
+
       dispatch(toggleModal(false));
     },
-    [dispatch],
+    [dispatch, maxBookId],
   );
 
   useEffect(() => {
