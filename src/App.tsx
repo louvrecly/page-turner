@@ -3,9 +3,10 @@ import NavBar from './components/NavBar';
 import BookShelf from './components/BookShelf';
 import Modal from './components/Modal';
 import BookForm from './components/BookForm';
-import fetchBooks from './helpers/fetchBooks';
+import fetchBooks, { getEmptyBook } from './helpers/fetchBooks';
 import {
   addBook,
+  selectActiveBookId,
   selectBooks,
   selectMaxBookId,
   setBooks,
@@ -19,19 +20,14 @@ const App = () => {
   const [error, setError] = useState<Error | null>(null);
   const books = useAppSelector(selectBooks);
   const maxBookId = useAppSelector(selectMaxBookId);
+  const activeBookId = useAppSelector(selectActiveBookId);
   const isModalOpened = useAppSelector(selectIsModalOpened);
   const dispatch = useAppDispatch();
 
-  const defaultBookFormValues = useMemo(
-    () => ({
-      id: maxBookId + 1,
-      title: '',
-      author: '',
-      price: 0,
-      description: '',
-      genres: [],
-    }),
-    [maxBookId],
+  const initialBookFormValues = useMemo(
+    () =>
+      books.find((book) => book.id === activeBookId) ?? getEmptyBook(maxBookId),
+    [activeBookId, books, maxBookId],
   );
 
   const handleSubmitBook = useCallback(
@@ -66,7 +62,7 @@ const App = () => {
 
       {isModalOpened && (
         <Modal>
-          <BookForm book={defaultBookFormValues} onSubmit={handleSubmitBook} />
+          <BookForm book={initialBookFormValues} onSubmit={handleSubmitBook} />
         </Modal>
       )}
     </div>

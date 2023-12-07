@@ -149,6 +149,17 @@ const books: Book[] = [
   },
 ];
 
+export function getEmptyBook(maxBookId: number): Book {
+  return {
+    id: maxBookId + 1,
+    title: '',
+    author: '',
+    price: 0,
+    description: '',
+    genres: [],
+  };
+}
+
 function fetchBooks(): Promise<Book[]> {
   return new Promise((resolve) => {
     setTimeout(() => resolve(books), 1000);

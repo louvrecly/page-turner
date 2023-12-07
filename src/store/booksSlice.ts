@@ -4,11 +4,13 @@ import Book from '../types/book';
 
 interface BooksState {
   maxBookId: number;
+  activeBookId: number;
   books: Book[];
 }
 
 const initialState: BooksState = {
   maxBookId: 0,
+  activeBookId: 0,
   books: [],
 };
 
@@ -22,6 +24,11 @@ export const booksSlice = createSlice({
         (maxId, book) => Math.max(maxId, book.id),
         state.maxBookId,
       );
+    },
+    setActiveBookId(state, action: PayloadAction<number>) {
+      const bookId = action.payload;
+
+      state.activeBookId = bookId;
     },
     addBook(state, action: PayloadAction<Book>) {
       const bookToSave = action.payload;
@@ -44,9 +51,12 @@ export const booksSlice = createSlice({
   },
 });
 
-export const { setBooks, addBook, editBook, removeBook } = booksSlice.actions;
+export const { setBooks, setActiveBookId, addBook, editBook, removeBook } =
+  booksSlice.actions;
 export const selectBooks = (state: RootState) => state.books.books;
 export const selectMaxBookId = (state: RootState) => state.books.maxBookId;
+export const selectActiveBookId = (state: RootState) =>
+  state.books.activeBookId;
 
 const booksReducer = booksSlice.reducer;
 

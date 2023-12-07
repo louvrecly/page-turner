@@ -13,7 +13,7 @@ export const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    toggleModal: (state, action: PayloadAction<boolean>) => {
+    toggleModal(state, action: PayloadAction<boolean>) {
       state.isModalOpened = action.payload;
     },
   },
