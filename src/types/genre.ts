@@ -1,4 +1,4 @@
-const ALL_GENRES = [
+export const ALL_GENRES = [
   'Art',
   'Biography',
   'Business',

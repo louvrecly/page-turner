@@ -4,7 +4,7 @@ import BookShelf from './components/BookShelf';
 import Modal from './components/Modal';
 import BookForm from './components/BookForm';
 import fetchBooks from './helpers/fetchBooks';
-import { selectBooks, setBooks } from './store/booksSlice';
+import { selectBooks, selectMaxBookId, setBooks } from './store/booksSlice';
 import { selectIsModalOpened } from './store/uiSlice';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
 
@@ -12,6 +12,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const books = useAppSelector(selectBooks);
+  const maxBookId = useAppSelector(selectMaxBookId);
   const isModalOpened = useAppSelector(selectIsModalOpened);
   const dispatch = useAppDispatch();
 
@@ -39,7 +40,7 @@ const App = () => {
 
       {isModalOpened && (
         <Modal>
-          <BookForm />
+          <BookForm bookId={maxBookId} />
         </Modal>
       )}
     </div>

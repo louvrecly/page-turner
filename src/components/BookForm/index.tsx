@@ -1,38 +1,100 @@
-import { FormEvent } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import FormInput from './FormInput';
 import FormTextArea from './FormTextArea';
 import LabelledField from './LabelledField';
+import Book from '../../types/book';
+import { ALL_GENRES } from '../../types/genre';
 
-const BookForm = () => {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
+type BookFormValues = Book;
+
+const BookFormValuesSchema: yup.ObjectSchema<BookFormValues> = yup
+  .object({
+    id: yup.number().positive().integer().required(),
+    title: yup.string().required(),
+    author: yup.string().required(),
+    price: yup.number().positive().required(),
+    description: yup.string().defined(),
+    genres: yup
+      .array(yup.string().defined().oneOf(ALL_GENRES))
+      .ensure()
+      .required(),
+  })
+  .required();
+
+interface BookFormProps {
+  bookId: number;
+}
+
+const BookForm = ({ bookId }: BookFormProps) => {
+  const defaultValues = useMemo(
+    () => ({
+      id: bookId,
+      title: '',
+      author: '',
+      price: 0,
+      description: '',
+      genres: [],
+    }),
+    [bookId],
+  );
+
+  const onSubmit = useCallback(
+    (formValues: BookFormValues) => console.log({ formValues }),
+    [],
+  );
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<BookFormValues>({
+    defaultValues,
+    resolver: yupResolver(BookFormValuesSchema),
+  });
 
   return (
     <form
       className="u-flex u-flex-col u-items-stretch u-gap-2"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <h2>Book Form</h2>
 
-      <LabelledField label="Title:" htmlFor="title">
-        <FormInput type="text" name="title" required />
+      <FormInput {...register('id')} value={bookId} disabled hidden />
+
+      <LabelledField
+        label="Title"
+        htmlFor="title"
+        errorMessage={errors.title?.message}
+      >
+        <FormInput id="title" {...register('title')} />
       </LabelledField>
 
-      <LabelledField label="Author:" htmlFor="author">
-        <FormInput type="text" name="author" required />
+      <LabelledField
+        label="Author"
+        htmlFor="author"
+        errorMessage={errors.author?.message}
+      >
+        <FormInput id="author" {...register('author')} />
       </LabelledField>
 
-      <LabelledField label="Price:" htmlFor="price">
-        <FormInput type="number" name="price" step=".01" required />
+      <LabelledField
+        label="Price"
+        htmlFor="price"
+        errorMessage={errors.price?.message}
+      >
+        <FormInput id="price" type="number" step=".01" {...register('price')} />
       </LabelledField>
 
       <LabelledField
         className="u-flex-col u-items-stretch"
-        label="Description:"
+        label="Description"
         htmlFor="description"
+        errorMessage={errors.description?.message}
       >
-        <FormTextArea name="description" />
+        <FormTextArea id="description" {...register('description')} />
       </LabelledField>
 
       <button type="submit">Save</button>
