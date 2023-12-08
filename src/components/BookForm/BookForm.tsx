@@ -6,12 +6,10 @@ import Select from 'react-select';
 import FormInput from './FormInput';
 import FormTextArea from './FormTextArea';
 import LabelledField from './LabelledField';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useAppSelector } from '../../hooks/redux';
 import useBookFormModal from '../../hooks/useBookFormModal';
+import useBookShelfManager from '../../hooks/useBookShelfManager';
 import {
-  addBook,
-  editBook,
-  removeBook,
   selectActiveBook,
   selectBookFormType,
   selectMaxBookId,
@@ -28,8 +26,9 @@ const BookForm = () => {
   const maxBookId = useAppSelector(selectMaxBookId);
   const activeBook = useAppSelector(selectActiveBook);
   const bookFormType = useAppSelector(selectBookFormType);
-  const dispatch = useAppDispatch();
   const { closeBookFormModal } = useBookFormModal();
+  const { addBookToShelf, editBookOnShelf, removeBookFromShelf } =
+    useBookShelfManager();
 
   const defaultValues = useMemo<BookFormValues>(
     () => getBookFormValues(activeBook),
@@ -61,15 +60,24 @@ const BookForm = () => {
       const book = parseBookFormValues(bookFormValues);
 
       if (bookFormType === 'remove') {
-        dispatch(removeBook(book.id));
+        removeBookFromShelf(book.id);
+      } else if (activeBook.id > maxBookId) {
+        addBookToShelf(book);
       } else {
-        if (activeBook.id > maxBookId) dispatch(addBook(book));
-        else dispatch(editBook(book));
+        editBookOnShelf(book);
       }
 
       closeBookFormModal();
     },
-    [activeBook.id, bookFormType, closeBookFormModal, dispatch, maxBookId],
+    [
+      activeBook.id,
+      addBookToShelf,
+      bookFormType,
+      closeBookFormModal,
+      editBookOnShelf,
+      maxBookId,
+      removeBookFromShelf,
+    ],
   );
 
   return (

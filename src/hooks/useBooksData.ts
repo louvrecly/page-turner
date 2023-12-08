@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from './redux';
-import { selectBooks, setBooks } from '../store/booksSlice';
+import { useAppSelector } from './redux';
+import useBookShelfManager from './useBookShelfManager';
+import { selectBooks } from '../store/booksSlice';
 import fetchBooks from '../helpers/fetchBooks';
 
 const useBooksData = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const books = useAppSelector(selectBooks);
-  const dispatch = useAppDispatch();
+  const { populateBookShelf } = useBookShelfManager();
 
   useEffect(() => {
     setIsLoading(true);
     fetchBooks()
-      .then((books) => dispatch(setBooks(books)))
+      .then(populateBookShelf)
       .catch(setError)
       .finally(() => setIsLoading(false));
-  }, [dispatch]);
+  }, [populateBookShelf]);
 
   return { books, isLoading, error };
 };
