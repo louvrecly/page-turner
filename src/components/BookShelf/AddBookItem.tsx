@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import BookItemContainer from './BookItem/Container';
+import BookItemContainer from './BookItem/BookItemContainer';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { toggleModal } from '../../store/uiSlice';
 import { setBookForm, selectMaxBookId } from '../../store/booksSlice';

@@ -1,5 +1,5 @@
 import { MouseEvent, useCallback, useMemo } from 'react';
-import BookItemContainer from './Container';
+import BookItemContainer from './BookItemContainer';
 import BookInfo from './BookInfo';
 import GenreList from '../../GenreList';
 import { useAppDispatch } from '../../../hooks/redux';
