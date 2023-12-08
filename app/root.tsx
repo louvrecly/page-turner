@@ -5,7 +5,10 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
+} from '@remix-run/react';
+import { Provider } from 'react-redux';
+import store from './store/store';
+import './index.css';
 
 export default function App() {
   return (
@@ -16,8 +19,12 @@ export default function App() {
         <Meta />
         <Links />
       </head>
+
       <body>
-        <Outlet />
+        <Provider store={store}>
+          <Outlet />
+        </Provider>
+
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

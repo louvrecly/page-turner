@@ -1,41 +1,60 @@
-import type { MetaFunction } from "@remix-run/node";
+import { useEffect, useState } from 'react';
+import type { MetaFunction } from '@remix-run/node';
+import NavBar from '../components/NavBar';
+import BookShelf from '../components/BookShelf';
+import Modal from '../components/Modal';
+import BookForm from '../components/BookForm';
+import fetchBooks from '../helpers/fetchBooks';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { selectBooks, setBooks } from '../store/booksSlice';
+import { selectIsModalOpened } from '../store/uiSlice';
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: '📚 Page Turner' },
+    {
+      name: 'description',
+      content: 'Welcome to the online bookshelf for your own book collection!',
+    },
   ];
 };
 
-export default function Index() {
+const Index = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const books = useAppSelector(selectBooks);
+  const isModalOpened = useAppSelector(selectIsModalOpened);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchBooks()
+      .then((books) => dispatch(setBooks(books)))
+      .catch(setError)
+      .finally(() => setIsLoading(false));
+  }, [dispatch]);
+
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    <div className="u-relative u-w-screen u-min-h-screen u-bg-gradient-to-b u-from-slate-950 u-to-slate-900 u-text-white">
+      <NavBar />
+
+      <div className="u-mx-auto u-p-4 u-container">
+        {isLoading ? (
+          <p className="u-text-center">Loading...</p>
+        ) : error ? (
+          <p className="u-text-center">Error: {error.message}</p>
+        ) : (
+          <BookShelf books={books} />
+        )}
+      </div>
+
+      {isModalOpened && (
+        <Modal>
+          <BookForm />
+        </Modal>
+      )}
     </div>
   );
-}
+};
+
+export default Index;
