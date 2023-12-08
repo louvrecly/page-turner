@@ -1,4 +1,4 @@
-import Genre from '../../types/genre';
+import Genre from '~/types/genre';
 
 interface GenrePillProps {
   genre: Genre;

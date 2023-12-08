@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import { useAppDispatch } from '../hooks/redux';
-import { toggleModal } from '../store/uiSlice';
+import { useAppDispatch } from '~/hooks/redux';
+import { toggleModal } from '~/store/uiSlice';
 
 interface ModalProps {
   children: ReactNode;

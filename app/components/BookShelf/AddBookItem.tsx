@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import BookItemContainer from './BookItem/Container';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { toggleModal } from '../../store/uiSlice';
-import { setBookForm, selectMaxBookId } from '../../store/booksSlice';
+import { useAppDispatch, useAppSelector } from '~/hooks/redux';
+import { toggleModal } from '~/store/uiSlice';
+import { setBookForm, selectMaxBookId } from '~/store/booksSlice';
 
 const AddBookItem = () => {
   const maxBookId = useAppSelector(selectMaxBookId);

@@ -1,6 +1,6 @@
 import * as yup from 'yup';
-import { ALL_GENRES } from '../../types/genre';
-import { BookFormValues } from '../../types/bookForm';
+import { ALL_GENRES } from '~/types/genre';
+import { BookFormValues } from '~/types/bookForm';
 
 const bookFormValuesSchema: yup.ObjectSchema<BookFormValues> = yup
   .object({

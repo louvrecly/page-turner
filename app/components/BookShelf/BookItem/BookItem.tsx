@@ -1,11 +1,11 @@
 import { MouseEvent, useCallback, useMemo } from 'react';
 import BookItemContainer from './Container';
 import BookInfo from './BookInfo';
-import GenreList from '../../GenreList';
-import { useAppDispatch } from '../../../hooks/redux';
-import { toggleModal } from '../../../store/uiSlice';
-import { setBookForm } from '../../../store/booksSlice';
-import Book from '../../../types/book';
+import GenreList from '~/components/GenreList';
+import { useAppDispatch } from '~/hooks/redux';
+import { toggleModal } from '~/store/uiSlice';
+import { setBookForm } from '~/store/booksSlice';
+import Book from '~/types/book';
 
 const GRADIENT_COLORS = [
   'u-from-rose-900 u-to-rose-600',

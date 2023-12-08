@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import type { MetaFunction } from '@remix-run/node';
-import NavBar from '../components/NavBar';
-import BookShelf from '../components/BookShelf';
-import Modal from '../components/Modal';
-import BookForm from '../components/BookForm';
-import fetchBooks from '../helpers/fetchBooks';
-import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import { selectBooks, setBooks } from '../store/booksSlice';
-import { selectIsModalOpened } from '../store/uiSlice';
+import NavBar from '~/components/NavBar';
+import BookShelf from '~/components/BookShelf';
+import Modal from '~/components/Modal';
+import BookForm from '~/components/BookForm';
+import fetchBooks from '~/helpers/fetchBooks';
+import { useAppDispatch, useAppSelector } from '~/hooks/redux';
+import { selectBooks, setBooks } from '~/store/booksSlice';
+import { selectIsModalOpened } from '~/store/uiSlice';
 
 export const meta: MetaFunction = () => {
   return [

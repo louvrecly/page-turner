@@ -1,5 +1,5 @@
-import Genre, { ALL_GENRES } from '../types/genre';
-import { SelectOption } from '../types/bookForm';
+import Genre, { ALL_GENRES } from '~/types/genre';
+import { SelectOption } from '~/types/bookForm';
 
 export function getGenreOption(genre: Genre): SelectOption<Genre> {
   return {
