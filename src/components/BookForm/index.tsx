@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { twMerge } from 'tailwind-merge';
 import Select from 'react-select';
 import FormInput from './FormInput';
 import FormTextArea from './FormTextArea';
@@ -10,8 +11,6 @@ import bookFormValuesSchema, {
   getBookFormValues,
   parseBookFormValues,
 } from './schema';
-import { genreOptions } from '../../types/genre';
-import { twMerge } from 'tailwind-merge';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   addBook,
@@ -22,6 +21,7 @@ import {
   selectMaxBookId,
 } from '../../store/booksSlice';
 import { toggleModal } from '../../store/uiSlice';
+import { genreOptions } from '../../helpers/genre';
 
 const BookForm = () => {
   const maxBookId = useAppSelector(selectMaxBookId);

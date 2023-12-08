@@ -1,10 +1,7 @@
 import * as yup from 'yup';
+import { getGenreOption, parseGenreOption } from '../../helpers/genre';
 import Book from '../../types/book';
-import Genre, {
-  ALL_GENRES,
-  getGenreOption,
-  parseGenreOption,
-} from '../../types/genre';
+import Genre, { ALL_GENRES } from '../../types/genre';
 import { SelectOption } from '../../types/bookForm';
 
 export type BookFormValues = Omit<Book, 'genres'> & {
