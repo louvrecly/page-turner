@@ -7,8 +7,8 @@ import {
   ScrollRestoration,
 } from '@remix-run/react';
 import { Provider } from 'react-redux';
-import store from './store/store';
-import './index.css';
+import store from '~/store/store';
+import '~/tailwind.css';
 
 export default function App() {
   return (
