@@ -1,27 +1,14 @@
-import { useEffect, useState } from 'react';
 import NavBar from './components/NavBar';
 import BookShelf from './components/BookShelf';
 import Modal from './components/Modal';
 import BookForm from './components/BookForm';
-import fetchBooks from './helpers/fetchBooks';
-import { useAppDispatch, useAppSelector } from './hooks/redux';
-import { selectBooks, setBooks } from './store/booksSlice';
+import { useAppSelector } from './hooks/redux';
 import { selectIsModalOpened } from './store/uiSlice';
+import useBooksData from './hooks/useBooksData';
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  const books = useAppSelector(selectBooks);
   const isModalOpened = useAppSelector(selectIsModalOpened);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    setIsLoading(true);
-    fetchBooks()
-      .then((books) => dispatch(setBooks(books)))
-      .catch(setError)
-      .finally(() => setIsLoading(false));
-  }, [dispatch]);
+  const { books, isLoading, error } = useBooksData();
 
   return (
     <div className="u-relative u-w-screen u-min-h-screen u-bg-gradient-to-b u-from-slate-950 u-to-slate-900 u-text-white">
