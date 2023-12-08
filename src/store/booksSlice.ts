@@ -62,8 +62,6 @@ export const { setBooks, addBook, editBook, removeBook, setBookForm } =
   booksSlice.actions;
 export const selectBooks = (state: RootState) => state.books.books;
 export const selectMaxBookId = (state: RootState) => state.books.maxBookId;
-export const selectActiveBookId = (state: RootState) =>
-  state.books.activeBookId;
 export const selectBookFormType = (state: RootState) =>
   state.books.bookFormType;
 export const selectActiveBook = (state: RootState) =>
