@@ -8,6 +8,11 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+
+/.cache
+/build
+/public/build
+.env
 dist
 dist-ssr
 *.local
