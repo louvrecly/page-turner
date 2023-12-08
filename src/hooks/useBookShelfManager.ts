@@ -1,9 +1,16 @@
 import { useCallback } from 'react';
-import { useAppDispatch } from './useRedux';
-import { addBook, editBook, removeBook, setBooks } from '../store/booksSlice';
+import { useAppDispatch, useAppSelector } from './useRedux';
+import {
+  addBook,
+  editBook,
+  removeBook,
+  selectBooks,
+  setBooks,
+} from '../store/booksSlice';
 import Book from '../types/book';
 
 const useBookShelfManager = () => {
+  const books = useAppSelector(selectBooks);
   const dispatch = useAppDispatch();
 
   const addBookToShelf = useCallback(
@@ -27,6 +34,7 @@ const useBookShelfManager = () => {
   );
 
   return {
+    books,
     addBookToShelf,
     editBookOnShelf,
     removeBookFromShelf,
