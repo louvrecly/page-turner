@@ -1,5 +1,5 @@
 import BookItemContainer from './BookItem/BookItemContainer';
-import { useAppSelector } from '../../hooks/redux';
+import { useAppSelector } from '../../hooks/useRedux';
 import useBookFormModal from '../../hooks/useBookFormModal';
 import { selectMaxBookId } from '../../store/booksSlice';
 

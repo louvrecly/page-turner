@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useAppDispatch } from './redux';
+import { useAppDispatch } from './useRedux';
 import { addBook, editBook, removeBook, setBooks } from '../store/booksSlice';
 import Book from '../types/book';
 

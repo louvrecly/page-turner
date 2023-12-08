@@ -2,7 +2,7 @@ import NavBar from './components/NavBar';
 import BookShelf from './components/BookShelf';
 import Modal from './components/Modal';
 import BookForm from './components/BookForm';
-import { useAppSelector } from './hooks/redux';
+import { useAppSelector } from './hooks/useRedux';
 import { selectIsModalOpened } from './store/uiSlice';
 import useBooksData from './hooks/useBooksData';
 
