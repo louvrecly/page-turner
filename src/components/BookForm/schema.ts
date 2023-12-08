@@ -1,23 +1,6 @@
 import * as yup from 'yup';
-import { getGenreOption, parseGenreOption } from '../../helpers/genre';
-import Book from '../../types/book';
-import Genre, { ALL_GENRES } from '../../types/genre';
-import { SelectOption } from '../../types/bookForm';
-
-export type BookFormValues = Omit<Book, 'genres'> & {
-  genres: SelectOption<Genre>[];
-};
-
-export function getBookFormValues(book: Book): BookFormValues {
-  return { ...book, genres: book.genres.map(getGenreOption) };
-}
-
-export function parseBookFormValues(bookFormValues: BookFormValues): Book {
-  return {
-    ...bookFormValues,
-    genres: bookFormValues.genres.map(parseGenreOption),
-  };
-}
+import { ALL_GENRES } from '../../types/genre';
+import { BookFormValues } from '../../types/bookForm';
 
 const bookFormValuesSchema: yup.ObjectSchema<BookFormValues> = yup
   .object({

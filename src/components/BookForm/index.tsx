@@ -6,11 +6,7 @@ import Select from 'react-select';
 import FormInput from './FormInput';
 import FormTextArea from './FormTextArea';
 import LabelledField from './LabelledField';
-import bookFormValuesSchema, {
-  BookFormValues,
-  getBookFormValues,
-  parseBookFormValues,
-} from './schema';
+import bookFormValuesSchema from './schema';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
   addBook,
@@ -22,6 +18,8 @@ import {
 } from '../../store/booksSlice';
 import { toggleModal } from '../../store/uiSlice';
 import { genreOptions } from '../../helpers/genre';
+import { getBookFormValues, parseBookFormValues } from '../../helpers/book';
+import { BookFormValues } from '../../types/bookForm';
 
 const BookForm = () => {
   const maxBookId = useAppSelector(selectMaxBookId);
