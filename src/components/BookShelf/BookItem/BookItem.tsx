@@ -2,9 +2,7 @@ import { MouseEvent, useCallback, useMemo } from 'react';
 import BookItemContainer from './BookItemContainer';
 import BookInfo from './BookInfo';
 import GenreList from '../../GenreList';
-import { useAppDispatch } from '../../../hooks/redux';
-import { toggleModal } from '../../../store/uiSlice';
-import { setBookForm } from '../../../store/booksSlice';
+import useBookFormModal from '../../../hooks/useBookFormModal';
 import Book from '../../../types/book';
 
 const GRADIENT_COLORS = [
@@ -29,20 +27,13 @@ interface BookItemProps {
 }
 
 const BookItem = ({ book }: BookItemProps) => {
-  const dispatch = useAppDispatch();
-
-  const handleBookOnClick = useCallback(() => {
-    dispatch(toggleModal(true));
-    dispatch(setBookForm({ type: 'save', bookId: book.id }));
-  }, [book.id, dispatch]);
-
+  const { openBookFormModal } = useBookFormModal();
   const handleCloseButtonOnClick = useCallback(
     (e: MouseEvent) => {
       e.stopPropagation();
-      dispatch(toggleModal(true));
-      dispatch(setBookForm({ type: 'remove', bookId: book.id }));
+      openBookFormModal('remove', book.id);
     },
-    [book.id, dispatch],
+    [book.id, openBookFormModal],
   );
 
   const gradientColor = useMemo(
@@ -51,7 +42,10 @@ const BookItem = ({ book }: BookItemProps) => {
   );
 
   return (
-    <BookItemContainer className={gradientColor} onClick={handleBookOnClick}>
+    <BookItemContainer
+      className={gradientColor}
+      onClick={() => openBookFormModal('save', book.id)}
+    >
       <button
         className="u-absolute u-top-px u-right-2"
         onClick={handleCloseButtonOnClick}

@@ -7,6 +7,7 @@ import FormInput from './FormInput';
 import FormTextArea from './FormTextArea';
 import LabelledField from './LabelledField';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import useBookFormModal from '../../hooks/useBookFormModal';
 import {
   addBook,
   editBook,
@@ -15,7 +16,6 @@ import {
   selectBookFormType,
   selectMaxBookId,
 } from '../../store/booksSlice';
-import { toggleModal } from '../../store/uiSlice';
 import {
   bookFormValuesSchema,
   genreOptions,
@@ -29,6 +29,7 @@ const BookForm = () => {
   const activeBook = useAppSelector(selectActiveBook);
   const bookFormType = useAppSelector(selectBookFormType);
   const dispatch = useAppDispatch();
+  const { closeBookFormModal } = useBookFormModal();
 
   const defaultValues = useMemo<BookFormValues>(
     () => getBookFormValues(activeBook),
@@ -66,9 +67,9 @@ const BookForm = () => {
         else dispatch(editBook(book));
       }
 
-      dispatch(toggleModal(false));
+      closeBookFormModal();
     },
-    [activeBook.id, bookFormType, dispatch, maxBookId],
+    [activeBook.id, bookFormType, closeBookFormModal, dispatch, maxBookId],
   );
 
   return (
