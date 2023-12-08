@@ -13,6 +13,8 @@ import bookFormValuesSchema, {
 import Book from '../../types/book';
 import BookFormType from '../../types/bookForm';
 import { genreOptions } from '../../types/genre';
+import { twMerge } from 'tailwind-merge';
+
 export interface BookFormProps {
   type: BookFormType;
   book: Book;
@@ -36,7 +38,7 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
   });
 
   const formTitle = useMemo(
-    () => (type === 'save' ? 'Save the Book' : 'Confirm to remove this book?'),
+    () => (type === 'save' ? 'Book Details' : 'Confirm to remove this book?'),
     [type],
   );
   const formAction = useMemo(
@@ -52,7 +54,7 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
         onSubmit(parsedBook);
       })}
     >
-      <h2>{formTitle}</h2>
+      <h2 className="u-text-xl u-font-bold">{formTitle}</h2>
 
       <FormInput {...register('id')} value={book.id} disabled hidden />
 
@@ -63,6 +65,7 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
       >
         <FormInput
           id="title"
+          placeholder="Enter the book title..."
           {...register('title')}
           disabled={type === 'remove'}
         />
@@ -75,6 +78,7 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
       >
         <FormInput
           id="author"
+          placeholder="Enter the author's name..."
           {...register('author')}
           disabled={type === 'remove'}
         />
@@ -102,6 +106,7 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
       >
         <FormTextArea
           id="description"
+          placeholder="The book is about..."
           {...register('description')}
           disabled={type === 'remove'}
         />
@@ -118,6 +123,11 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
           control={control}
           render={({ field }) => (
             <Select
+              classNames={{
+                control: () => '!u-bg-zinc-800/70',
+                menu: () => '!u-bg-zinc-800/70',
+                menuList: () => 'u-text-indigo-600',
+              }}
               inputId="genres"
               options={genreOptions}
               {...field}
@@ -128,7 +138,15 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
         />
       </LabelledField>
 
-      <button type="submit">{formAction}</button>
+      <button
+        type="submit"
+        className={twMerge(
+          'u-py-1 u-px-2 u-rounded',
+          type === 'save' ? 'u-bg-emerald-600' : 'u-bg-rose-600',
+        )}
+      >
+        {formAction}
+      </button>
     </form>
   );
 };
