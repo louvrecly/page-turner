@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
-import { getEmptyBook } from '../helpers/fetchBooks';
+import { getEmptyBook } from '../helpers/book';
 import Book from '../types/book';
 import BookFormType from '../types/bookForm';
 
