@@ -32,7 +32,7 @@ export const booksSlice = createSlice({
     addBook(state, action: PayloadAction<Book>) {
       const bookToSave = action.payload;
 
-      state.books.push(bookToSave);
+      state.books.unshift(bookToSave);
       state.maxBookId = bookToSave.id;
     },
     editBook(state, action: PayloadAction<Book>) {
