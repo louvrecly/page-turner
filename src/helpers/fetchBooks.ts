@@ -149,15 +149,21 @@ const books: Book[] = [
   },
 ];
 
+const emptyBooksMemo: Record<number, Book> = {};
+
 export function getEmptyBook(maxBookId: number): Book {
-  return {
-    id: maxBookId + 1,
-    title: '',
-    author: '',
-    price: 0,
-    description: '',
-    genres: [],
-  };
+  if (!(maxBookId + 1 in emptyBooksMemo)) {
+    emptyBooksMemo[maxBookId + 1] = {
+      id: maxBookId + 1,
+      title: '',
+      author: '',
+      price: 0,
+      description: '',
+      genres: [],
+    };
+  }
+
+  return emptyBooksMemo[maxBookId + 1];
 }
 
 function fetchBooks(): Promise<Book[]> {

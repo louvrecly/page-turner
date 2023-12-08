@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from './store';
+import { getEmptyBook } from '../helpers/fetchBooks';
 import Book from '../types/book';
 import BookFormType from '../types/bookForm';
 
@@ -65,6 +66,9 @@ export const selectActiveBookId = (state: RootState) =>
   state.books.activeBookId;
 export const selectBookFormType = (state: RootState) =>
   state.books.bookFormType;
+export const selectActiveBook = (state: RootState) =>
+  state.books.books.find((book) => book.id === state.books.activeBookId) ??
+  getEmptyBook(state.books.maxBookId);
 
 const booksReducer = booksSlice.reducer;
 

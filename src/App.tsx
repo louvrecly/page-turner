@@ -1,52 +1,19 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import NavBar from './components/NavBar';
 import BookShelf from './components/BookShelf';
 import Modal from './components/Modal';
 import BookForm from './components/BookForm';
-import fetchBooks, { getEmptyBook } from './helpers/fetchBooks';
-import {
-  addBook,
-  editBook,
-  removeBook,
-  selectActiveBookId,
-  selectBookFormType,
-  selectBooks,
-  selectMaxBookId,
-  setBooks,
-} from './store/booksSlice';
-import { selectIsModalOpened, toggleModal } from './store/uiSlice';
+import fetchBooks from './helpers/fetchBooks';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
-import Book from './types/book';
+import { selectBooks, setBooks } from './store/booksSlice';
+import { selectIsModalOpened } from './store/uiSlice';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const books = useAppSelector(selectBooks);
-  const maxBookId = useAppSelector(selectMaxBookId);
-  const activeBookId = useAppSelector(selectActiveBookId);
-  const bookFormType = useAppSelector(selectBookFormType);
   const isModalOpened = useAppSelector(selectIsModalOpened);
   const dispatch = useAppDispatch();
-
-  const initialBookFormValues = useMemo(
-    () =>
-      books.find((book) => book.id === activeBookId) ?? getEmptyBook(maxBookId),
-    [activeBookId, books, maxBookId],
-  );
-
-  const handleSubmitBook = useCallback(
-    (book: Book) => {
-      if (bookFormType === 'remove') {
-        dispatch(removeBook(book.id));
-      } else {
-        if (book.id > maxBookId) dispatch(addBook(book));
-        else dispatch(editBook(book));
-      }
-
-      dispatch(toggleModal(false));
-    },
-    [bookFormType, dispatch, maxBookId],
-  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -72,13 +39,7 @@ const App = () => {
 
       {isModalOpened && (
         <Modal>
-          {bookFormType && (
-            <BookForm
-              type={bookFormType}
-              book={initialBookFormValues}
-              onSubmit={handleSubmitBook}
-            />
-          )}
+          <BookForm />
         </Modal>
       )}
     </div>

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Select from 'react-select';
@@ -10,21 +10,28 @@ import bookFormValuesSchema, {
   getBookFormValues,
   parseBookFormValues,
 } from './schema';
-import Book from '../../types/book';
-import BookFormType from '../../types/bookForm';
 import { genreOptions } from '../../types/genre';
 import { twMerge } from 'tailwind-merge';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import {
+  addBook,
+  editBook,
+  removeBook,
+  selectActiveBook,
+  selectBookFormType,
+  selectMaxBookId,
+} from '../../store/booksSlice';
+import { toggleModal } from '../../store/uiSlice';
 
-export interface BookFormProps {
-  type: BookFormType;
-  book: Book;
-  onSubmit: (book: Book) => void;
-}
+const BookForm = () => {
+  const maxBookId = useAppSelector(selectMaxBookId);
+  const activeBook = useAppSelector(selectActiveBook);
+  const bookFormType = useAppSelector(selectBookFormType);
+  const dispatch = useAppDispatch();
 
-const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
   const defaultValues = useMemo<BookFormValues>(
-    () => getBookFormValues(book),
-    [book],
+    () => getBookFormValues(activeBook),
+    [activeBook],
   );
 
   const {
@@ -38,25 +45,39 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
   });
 
   const formTitle = useMemo(
-    () => (type === 'save' ? 'Book Details' : 'Confirm to remove this book?'),
-    [type],
+    () =>
+      bookFormType === 'save' ? 'Book Details' : 'Confirm to remove this book?',
+    [bookFormType],
   );
   const formAction = useMemo(
-    () => (type === 'save' ? 'Save' : 'Confirm'),
-    [type],
+    () => (bookFormType === 'save' ? 'Save' : 'Confirm'),
+    [bookFormType],
+  );
+
+  const onSubmit = useCallback(
+    (bookFormValues: BookFormValues) => {
+      const book = parseBookFormValues(bookFormValues);
+
+      if (bookFormType === 'remove') {
+        dispatch(removeBook(book.id));
+      } else {
+        if (activeBook.id > maxBookId) dispatch(addBook(book));
+        else dispatch(editBook(book));
+      }
+
+      dispatch(toggleModal(false));
+    },
+    [activeBook.id, bookFormType, dispatch, maxBookId],
   );
 
   return (
     <form
       className="u-flex u-flex-col u-items-stretch u-gap-2"
-      onSubmit={handleSubmit((bookFormValues: BookFormValues) => {
-        const parsedBook = parseBookFormValues(bookFormValues);
-        onSubmit(parsedBook);
-      })}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <h2 className="u-text-xl u-font-bold">{formTitle}</h2>
 
-      <FormInput {...register('id')} value={book.id} disabled hidden />
+      <FormInput {...register('id')} value={defaultValues.id} disabled hidden />
 
       <LabelledField
         label="Title"
@@ -67,7 +88,7 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
           id="title"
           placeholder="Enter the book title..."
           {...register('title')}
-          disabled={type === 'remove'}
+          disabled={bookFormType === 'remove'}
         />
       </LabelledField>
 
@@ -80,7 +101,7 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
           id="author"
           placeholder="Enter the author's name..."
           {...register('author')}
-          disabled={type === 'remove'}
+          disabled={bookFormType === 'remove'}
         />
       </LabelledField>
 
@@ -94,7 +115,7 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
           type="number"
           step=".01"
           {...register('price')}
-          disabled={type === 'remove'}
+          disabled={bookFormType === 'remove'}
         />
       </LabelledField>
 
@@ -108,7 +129,7 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
           id="description"
           placeholder="The book is about..."
           {...register('description')}
-          disabled={type === 'remove'}
+          disabled={bookFormType === 'remove'}
         />
       </LabelledField>
 
@@ -132,7 +153,7 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
               options={genreOptions}
               {...field}
               isMulti
-              isDisabled={type === 'remove'}
+              isDisabled={bookFormType === 'remove'}
             />
           )}
         />
@@ -142,7 +163,7 @@ const BookForm = ({ type, book, onSubmit }: BookFormProps) => {
         type="submit"
         className={twMerge(
           'u-py-1 u-px-2 u-rounded',
-          type === 'save' ? 'u-bg-emerald-600' : 'u-bg-rose-600',
+          bookFormType === 'save' ? 'u-bg-emerald-600' : 'u-bg-rose-600',
         )}
       >
         {formAction}
