@@ -2,13 +2,12 @@ import NavBar from './components/NavBar';
 import BookShelf from './components/BookShelf';
 import Modal from './components/Modal';
 import BookForm from './components/BookForm';
-import { useAppSelector } from './hooks/useRedux';
-import { selectIsModalOpened } from './store/uiSlice';
 import useBooksData from './hooks/useBooksData';
+import useBookFormModal from './hooks/useBookFormModal';
 
 const App = () => {
-  const isModalOpened = useAppSelector(selectIsModalOpened);
   const { books, isLoading, error } = useBooksData();
+  const { isModalOpened } = useBookFormModal();
 
   return (
     <div className="u-relative u-w-screen u-min-h-screen u-bg-gradient-to-b u-from-slate-950 u-to-slate-900 u-text-white">
