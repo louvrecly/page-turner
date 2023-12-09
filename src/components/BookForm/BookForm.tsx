@@ -6,14 +6,8 @@ import Select from 'react-select';
 import FormInput from './FormInput';
 import FormTextArea from './FormTextArea';
 import LabelledField from './LabelledField';
-import { useAppSelector } from '../../hooks/useRedux';
 import useBookFormModal from '../../hooks/useBookFormModal';
 import useBookShelfManager from '../../hooks/useBookShelfManager';
-import {
-  selectActiveBook,
-  selectBookFormType,
-  selectMaxBookId,
-} from '../../store/booksSlice';
 import {
   bookFormValuesSchema,
   genreOptions,
@@ -23,10 +17,8 @@ import {
 import { BookFormValues } from '../../types/bookForm';
 
 const BookForm = () => {
-  const maxBookId = useAppSelector(selectMaxBookId);
-  const activeBook = useAppSelector(selectActiveBook);
-  const bookFormType = useAppSelector(selectBookFormType);
-  const { closeBookFormModal } = useBookFormModal();
+  const { maxBookId, activeBook, bookFormType, closeBookFormModal } =
+    useBookFormModal();
   const { addBookToShelf, editBookOnShelf, removeBookFromShelf } =
     useBookShelfManager();
 
@@ -71,12 +63,12 @@ const BookForm = () => {
     },
     [
       activeBook.id,
-      addBookToShelf,
       bookFormType,
-      closeBookFormModal,
-      editBookOnShelf,
       maxBookId,
+      addBookToShelf,
+      editBookOnShelf,
       removeBookFromShelf,
+      closeBookFormModal,
     ],
   );
 

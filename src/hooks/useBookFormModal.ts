@@ -1,11 +1,19 @@
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from './useRedux';
 import { selectIsModalOpened, toggleModal } from '../store/uiSlice';
-import { setBookForm } from '../store/booksSlice';
+import {
+  selectActiveBook,
+  selectBookFormType,
+  selectMaxBookId,
+  setBookForm,
+} from '../store/booksSlice';
 import BookFormType from '../types/bookForm';
 
 const useBookFormModal = () => {
   const isModalOpened = useAppSelector(selectIsModalOpened);
+  const maxBookId = useAppSelector(selectMaxBookId);
+  const activeBook = useAppSelector(selectActiveBook);
+  const bookFormType = useAppSelector(selectBookFormType);
   const dispatch = useAppDispatch();
 
   const openBookFormModal = useCallback(
@@ -21,7 +29,14 @@ const useBookFormModal = () => {
     [dispatch],
   );
 
-  return { isModalOpened, openBookFormModal, closeBookFormModal };
+  return {
+    isModalOpened,
+    maxBookId,
+    activeBook,
+    bookFormType,
+    openBookFormModal,
+    closeBookFormModal,
+  };
 };
 
 export default useBookFormModal;
